@@ -13,18 +13,26 @@ dynamic encrypter(String password) {
 }
 
 class DbManager {
-  // ignore: unused_field
   late Database _database;
 
   Future openDb() async {
     _database = await openDatabase(
         join(await getDatabasesPath(), "bankimoon.db"),
-        version: 1, onCreate: (Database db, int version) async {
+        version: 2, onCreate: (Database db, int version) async {
       await db.execute(
-        "CREATE TABLE IF NOT EXISTS accounts(id INTEGER PRIMARY KEY autoincrement, bankName TEXT, accountName TEXT, accountNumber INTEGER)",
+        """CREATE TABLE IF NOT EXISTS accounts(
+          id INTEGER PRIMARY KEY autoincrement, 
+          bankName TEXT, 
+          accountName TEXT, 
+          accountNumber INTEGER,
+          is_favourite TEXT
+          )""",
       );
       await db.execute(
-        "CREATE TABLE IF NOT EXISTS password(id INTEGER PRIMARY KEY autoincrement, password TEXT)",
+        """CREATE TABLE IF NOT EXISTS password(
+          id INTEGER PRIMARY KEY autoincrement, 
+          password TEXT
+          )""",
       );
     });
     return _database;
